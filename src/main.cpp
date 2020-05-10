@@ -2,10 +2,11 @@
 
 #include <iostream>
 #include <memory>
-
-using namespace std;
+#include <ctime>
 
 int main(int argc, char *argv[]) {
+    srand(time(0));
+
     std::unique_ptr<nibbles::Game> game = std::make_unique<nibbles::Game>();
     game->initialize();
 

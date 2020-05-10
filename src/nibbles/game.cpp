@@ -75,11 +75,14 @@ void Game::showTitle() {
     attroff(COLOR_PAIR(1));
     
     attron(COLOR_PAIR(2));
-    ss << " c) continue to the game";
+    ss << " Use Arrow keys to control the snake";
     mvprintw(22, 10, ss.str().c_str());
     ss.str(std::string());
+    ss << " c) continue to the game";
+    mvprintw(24, 10, ss.str().c_str());
+    ss.str(std::string());
     ss << " q) quit";
-    mvprintw(23, 10, ss.str().c_str());
+    mvprintw(25, 10, ss.str().c_str());
     attroff(COLOR_PAIR(2));
 }
 
@@ -129,7 +132,6 @@ void Game::keyPressLoop() {
             default:
                 break;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 
@@ -143,6 +145,9 @@ void Game::runControlLoop() {
                 this->shutDown = true;
             }
             this->snake->initialize();
+        }
+        if (this->board->hasEaten(head)) {
+            this->board->incrementScore();
         }
         std::stringstream ss;
         ss << this->snake->getSize();
