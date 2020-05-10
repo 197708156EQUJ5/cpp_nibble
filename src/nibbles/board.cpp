@@ -5,7 +5,7 @@
 
 namespace nibbles {
 
-Board::Board() : score(0), lives(3), level(1), speed(100) {
+Board::Board() : score(0), lives(3), level(1), speed(300) {
 }
 
 void Board::initialize() {
@@ -15,7 +15,8 @@ void Board::initialize() {
     attroff(A_BOLD | COLOR_PAIR(3));
 
     this->update();
-    this->create();
+    this->createLevel();
+    this->newApple();
 
     refresh();
 }
@@ -28,7 +29,7 @@ void Board::update() {
     attroff(A_BOLD | COLOR_PAIR(2));
 }
 
-void Board::create() {
+void Board::createLevel() {
     for (uint32_t x = 2; x <= 96; x++) {
         board.push_back(Location{2, x});
     }
@@ -61,6 +62,12 @@ void Board::decrementLife() {
     update();
 }
 
+void Board::incrementScore() {
+    this->score++;
+    this->newApple();
+    update();
+}
+
 bool Board::hasCollided(Location location) {
     for (Location loc : this->board) {
         if (loc.y == location.y && loc.x == location.x) {
@@ -69,6 +76,20 @@ bool Board::hasCollided(Location location) {
     }
 
     return false;
+}
+
+bool Board::hasEaten(Location location) {
+    if (apple.y == (int)location.y && apple.x == (int)location.x) {
+        return true;
+    }
+
+    return false;
+}
+
+void Board::newApple() {
+    this->apple.create();
+    mvaddch(this->apple.y, this->apple.x, this->apple.c);
+    refresh();
 }
 
 bool Board::isGameOver() {
