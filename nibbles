@@ -1,0 +1,3 @@
+#!/bin/bash
+
+lxterminal --geometry=100x38 -t Nibbles -e ./build/apps/Nibbles
