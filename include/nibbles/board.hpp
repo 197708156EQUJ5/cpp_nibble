@@ -2,6 +2,8 @@
 
 #include "nibbles/location.hpp"
 #include "nibbles/apple.hpp"
+#include "nibbles/level.hpp"
+#include "nibbles/level_factory.hpp"
 
 #include <cstdint>
 #include <vector>
@@ -19,7 +21,7 @@ public:
     bool hasEaten(Location location);
     bool isGameOver();
     uint32_t getSpeed();
-    void createLevel();
+    void createLevel(uint32_t levelIndex);
     void decrementLife();
     void incrementScore();
     void update();
@@ -33,7 +35,8 @@ private:
     uint32_t level;
     uint32_t speed;
     std::vector<Location> board;
-    Apple apple;    
+    Apple apple;
+    std::vector<Level> levels;
 };
     
 }

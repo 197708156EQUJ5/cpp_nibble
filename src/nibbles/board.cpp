@@ -11,11 +11,13 @@ Board::Board() : score(0), lives(3), level(1), speed(300) {
 void Board::initialize() {
     erase();
     attron(A_BOLD | COLOR_PAIR(3));
-    border('|', '|', '-', '-', '+', '+', '+', '+');
+    border(ACS_CKBOARD, ACS_CKBOARD, ACS_CKBOARD, ACS_CKBOARD, ACS_CKBOARD, ACS_CKBOARD, ACS_CKBOARD, ACS_CKBOARD);
     attroff(A_BOLD | COLOR_PAIR(3));
 
     this->update();
-    this->createLevel();
+    this->levels.push_back(LevelFactory::createLevel1());
+    this->levels.push_back(LevelFactory::createLevel2());
+    this->createLevel(1);
     this->newApple();
 
     refresh();
@@ -29,28 +31,43 @@ void Board::update() {
     attroff(A_BOLD | COLOR_PAIR(2));
 }
 
-void Board::createLevel() {
+void Board::createLevel(uint32_t levelIndex) {
+    this->level = levelIndex + 1;
+    update();
+    attron(A_BOLD | COLOR_PAIR(4));
     for (uint32_t x = 2; x <= 96; x++) {
         board.push_back(Location{2, x});
     }
-    mvaddch(2, 2, '+');
-    mvhline(2, 3, '-', 94);
-    mvaddch(2, 96, '+');
+    mvaddch(2, 2, ACS_CKBOARD);
+    mvhline(2, 3, ACS_CKBOARD, 94);
+    mvaddch(2, 96, ACS_CKBOARD);
 
     for (uint32_t y = 3; y <= 34; y++) {
         board.push_back(Location{y, 2});
         board.push_back(Location{y, 96});
     }
 
-    mvvline(3, 2, '|', 34);
-    mvvline(3, 96, '|', 34);
+    mvvline(3, 2, ACS_CKBOARD, 34);
+    mvvline(3, 96, ACS_CKBOARD, 34);
 
     for (uint32_t x = 2; x <= 96; x++) {
         board.push_back(Location{36, x});
     }
-    mvaddch(36, 2, '+');
-    mvhline(36, 3, '-', 94);
-    mvaddch(36, 96, '+');
+    mvaddch(36, 2, ACS_CKBOARD);
+    mvhline(36, 3, ACS_CKBOARD, 94);
+    mvaddch(36, 96, ACS_CKBOARD);
+    attroff(A_BOLD | COLOR_PAIR(4));
+
+    attron(A_BOLD | COLOR_PAIR(5));
+    std::vector<Wall> walls = this->levels.at(levelIndex).walls;
+    for (Wall wall : walls) {
+        if (wall.isVertical) {
+            mvvline(wall.startingPoint.y, wall.startingPoint.x, ACS_CKBOARD, wall.length);
+        } else {
+            mvhline(wall.startingPoint.y, wall.startingPoint.x, ACS_CKBOARD, wall.length);
+        }
+    }
+    attroff(A_BOLD | COLOR_PAIR(5));
 }
 
 uint32_t Board::getSpeed() {
