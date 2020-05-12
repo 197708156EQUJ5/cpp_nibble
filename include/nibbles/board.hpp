@@ -13,6 +13,10 @@ public:
     
     Board();
     ~Board() = default;
+    Board(const Board &other) = delete;
+    Board(Board &other) = delete;
+    Board& operator=(const Board &other) = delete;
+    Board& operator=(Board &other) = delete;
 
     void initialize();
     bool hasCollided(Location location);

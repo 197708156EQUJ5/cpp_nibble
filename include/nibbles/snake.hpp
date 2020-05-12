@@ -19,7 +19,11 @@ public:
 
     Snake();
     ~Snake() = default;
-    
+    Snake(const Snake &other) = delete;
+    Snake(Snake &other) = delete;
+    Snake& operator=(const Snake &other) = delete;
+    Snake& operator=(Snake &other) = delete;
+ 
     void initialize();
     void draw();
     Location move();

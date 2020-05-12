@@ -1,5 +1,5 @@
-CXX      := gcc
-CXXFLAGS := -Wall -Wextra -Werror -Wno-unused-parameter
+CXX      := g++
+CXXFLAGS := -Wall -Wextra -Werror -Wno-unused-parameter -fno-exceptions
 LDFLAGS  := -L/usr/lib -lstdc++ -lm -pthread -lncurses
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
